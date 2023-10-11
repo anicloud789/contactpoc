@@ -1,5 +1,5 @@
-//const salesforceService = require('../services/salesforceService');
-//const customErrorHandler = require('../errorHandling/customErrorHandler');
+const salesforceService = require('../services/salesforceService');
+const customErrorHandler = require('../errorHandling/customErrorHandler');
 
 module.exports = async function (context, req) {
     try {
@@ -12,15 +12,16 @@ module.exports = async function (context, req) {
 
         context.log("action=>",action);
         
+        if (action === 'getAll') {
+            const contact = await salesforceService.getAllContact();
+            context.res = {
+                status: 200,
+                body: contact
+            };
 
-        // // Based on the action, invoke appropriate method in salesforceService
-        // if (action === 'getAll') {
-        //     const contact = await salesforceService.getAllContact();
-        //     context.res = {
-        //         status: 200,
-        //         body: contact
-        //     };
-        // }else if (action === 'get') {
+
+        }
+        //else if (action === 'get') {
         //     const contact = await salesforceService.getContact(contactId);
         //     context.res = {
         //         status: 200,
