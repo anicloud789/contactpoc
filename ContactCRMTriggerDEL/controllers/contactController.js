@@ -18,7 +18,7 @@ module.exports = async function (context, req) {
             context.log("ALL contacts=>",contact)
             context.res = {
                 status: 200,
-                body: contact
+                body: contact.recentItems
             };
 
 
