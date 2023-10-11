@@ -15,7 +15,7 @@ module.exports = async function (context, req) {
         if (action === 'getAll') {
             const contact = await salesforceService.getAllContact();
 
-            context.log("ALL contacts=>",contact)
+            context.log("ALL contacts=>",JSON.stringify(contact.recentItems,null,2));
             context.res = {
                 status: 200,
                 body: contact.recentItems
