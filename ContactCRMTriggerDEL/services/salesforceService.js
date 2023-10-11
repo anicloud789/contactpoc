@@ -2,7 +2,8 @@ const salesforceAuth = require('../auth/salesforceAuth');
 const axios = require('axios');
 const winstonLogger = require('../logger/winstonLogger');
 
-const BASE_URL = 'https://dream-nosoftware-499.my.salesforce.com'; // Update with your Salesforce instance URL
+// Update Salesforce instance URL
+const BASE_URL = 'https://dream-nosoftware-499.my.salesforce.com'; 
 
 const authenticateAndFetchAccessToken = async () => {
     const accessToken = await salesforceAuth.authenticateWithSalesforce();

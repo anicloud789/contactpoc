@@ -51,15 +51,16 @@ module.exports = async function (context, req) {
         //     context.res = {
         //         status: 204
         //     };
-        // } else {
-        //     context.res = {
-        //         status: 400,
-        //         body: 'Invalid action specified.'
-        //     };
-        // }
+        // } 
+        else {
+            context.res = {
+                status: 400,
+                body: 'Invalid action specified.'
+            };
+        }
     } catch (error) {
-        context.log("error=>",error);
+       // context.log("error=>",error);
         // Handle errors using custom error handler and logging
-        //customErrorHandler(error, context);
+        customErrorHandler(error, context);
     }
 };
