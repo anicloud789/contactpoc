@@ -6,8 +6,8 @@ module.exports = async function (context, req) {
 
         context.log("req=>",req);
         
-        const action = req.query.action; // Assume action is 'get', 'create', 'update', or 'delete'
-       // const contactId = req.query.contactId; // Assuming the contact ID is passed
+        const action = req.action; // Assume action is 'get', 'create', 'update', or 'delete'
+        const contactId = req.contactId; // Assuming the contact ID is passed
 
 
         context.log("action=>",action);
