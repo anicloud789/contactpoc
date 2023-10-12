@@ -101,4 +101,4 @@ if (isDebugMode) {
 //   };
 // };
 
-module.exports = { logger, generateCorrelationId };
+module.exports = { logger };
