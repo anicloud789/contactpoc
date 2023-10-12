@@ -41,7 +41,7 @@ const customFileTransport = new transports.File({
     // }
 
     const datePart = new Date().toISOString().slice(0, 10); // Create a new log file each day
-    return path.join(logDir, `${datePart}-app.log`);
+    return path.join(logDir,'logs', `${datePart}-app.log`);
   },
   format: format.combine(
     format.timestamp(),
