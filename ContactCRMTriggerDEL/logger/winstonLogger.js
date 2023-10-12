@@ -22,7 +22,7 @@
 const { createLogger, transports, format } = require('winston');
 //const fs = require('fs');
 const path = require('path');
-const {v4:uuidv4} = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 const maxSize = 1024 * 256; // 250 MB
 
@@ -32,41 +32,35 @@ const generateCorrelationId = () => uuidv4();
 // Check if we're in debug mode
 const isDebugMode = process.env.NODE_ENV === 'development' && process.env.DEBUG_MODE === 'true';
 
-const customFileTransport = new transports.File({
-  filename: (options) => {
-    const logDir = __dirname; // Specify your log directory
-    // Create the log directory if it doesn't exist
-    // if (!fs.existsSync(logDir)) {
-    //   fs.mkdirSync(logDir);
-    // }
+const datePart = new Date().toISOString().slice(0, 10);
+const logFilePath = path.join(__dirname, 'logs', `${datePart}-app.log`);
 
-    const datePart = new Date().toISOString().slice(0, 10); // Create a new log file each day
-    return path.join(logDir,'logs', `${datePart}-app.log`);
-  },
-  format: format.combine(
-    format.timestamp(),
-    format.json(),
-    format.printf((info) => {
-      // Add correlation ID to the log message
-      return `[${info.timestamp}] [Correlation ID: ${info.correlationId}] ${info.level}: ${info.message}`;
-    })
-  ),
-  maxsize: maxSize,
-  maxFiles: 3, // Maximum number of files to keep (for rotation)
-});
+const customFileTransport = new transports.File(
+    { filename: logFilePath },
+    {   format: format.combine(
+            format.timestamp(),
+            format.json(),
+            format.printf((info) => {
+                // Add correlation ID to the log message
+                return `[${info.timestamp}] [Correlation ID: ${info.correlationId}] ${info.level}: ${info.message}`;
+            })
+        ),
+        maxsize: maxSize,
+        maxFiles: 3, // Maximum number of files to keep (for rotation)
+    });
 
 const logger = createLogger({
-  transports: [customFileTransport],
+    transports: [customFileTransport],
 });
 
 if (isDebugMode) {
-  logger.add(new transports.Console({
-    level: 'debug',
-    format: format.combine(
-      format.colorize(),
-      format.simple()
-    ),
-  }));
+    logger.add(new transports.Console({
+        level: 'debug',
+        format: format.combine(
+            format.colorize(),
+            format.simple()
+        ),
+    }));
 }
 
 // module.exports = async function (context, req) {
@@ -110,4 +104,4 @@ if (isDebugMode) {
 //   };
 // };
 
-module.exports = {logger,generateCorrelationId};
+module.exports = { logger, generateCorrelationId };
