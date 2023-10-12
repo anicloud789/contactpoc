@@ -1,5 +1,5 @@
 const salesforceService = require('../services/salesforceService');
-const customErrorHandler = require('../errorHandling/customErrorHandler');
+//const customErrorHandler = require('../errorHandling/customErrorHandler');
 const { logger, generateCorrelationId } = require('../logger/winstonLogger');
 
 module.exports = async function (context, req) {
@@ -67,7 +67,7 @@ module.exports = async function (context, req) {
             };
         }
         else {
-            customErrorHandler({ message: "Invalid action specified" }, context);
+            //customErrorHandler({ message: "Invalid action specified" }, context);
             context.res = {
                 status: 200,
                 body: 'Invalid action specified.'
