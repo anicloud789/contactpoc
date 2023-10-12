@@ -9,7 +9,6 @@ module.exports = async function (context, req) {
         const action = req.action; // Assume action is 'get', 'create', 'update', or 'delete'
         const contactId = req.contactId; // Assuming the contact ID is passed
 
-
         context.log("action=>",action);
         
         if (action === 'getAll') {
@@ -22,20 +21,20 @@ module.exports = async function (context, req) {
             };
 
 
-        }
+        }else if (action === 'create') {
+                // Implement create logic
+                const contactDetails = req.data; // Assuming the contact details are passed in the request body
+                const createdContact = await salesforceService.createContact(contactDetails);
+                context.res = {
+                    status: 201,
+                    body: createdContact
+                };
+            }
         //else if (action === 'get') {
         //     const contact = await salesforceService.getContact(contactId);
         //     context.res = {
         //         status: 200,
         //         body: contact
-        //     };
-        // }else if (action === 'create') {
-        //     // Implement create logic
-        //     const contactDetails = req.body; // Assuming the contact details are passed in the request body
-        //     const createdContact = await salesforceService.createContact(contactDetails);
-        //     context.res = {
-        //         status: 201,
-        //         body: createdContact
         //     };
         // } else if (action === 'update') {
         //     // Implement update logic
