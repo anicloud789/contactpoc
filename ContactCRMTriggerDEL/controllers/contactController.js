@@ -5,22 +5,17 @@ const { logger, generateCorrelationId } = require('../logger/winstonLogger');
 module.exports = async function (context, req) {
     try {
 
+        logger.log({level: 'info',message: 'Function Started',correlationId,});
+
         const correlationId = generateCorrelationId();
 
-        context.log("req=>", req);
+        logger.log({level: 'debug',message: JSON.stringify(req,null,2),correlationId,});
 
-        context.log("correlationId=>", correlationId);
-
-        logger.log({
-            level: 'info',
-            message: 'Function Started',
-            correlationId,
-        });
+        //context.log("req=>", req);
+        //context.log("correlationId=>", correlationId);
 
         const action = req.action;
         const contactId = req.contactId;
-
-        context.log("action=>", action);
 
         if (action === 'getAll') {
             const contact = await salesforceService.getAllContact();
@@ -58,9 +53,11 @@ module.exports = async function (context, req) {
             };
         }
         else if (action === 'get') {
+            logger.log({level: 'info',message: "Start Get Method",correlationId,});
             const contact = await salesforceService.getContact(contactId);
-            context.log("Get Contact By ID=>", JSON.stringify(contact, null, 2));
-
+            logger.log({level: 'debug',message: JSON.stringify(contact, null, 2),correlationId,});
+           // context.log("Get Contact By ID=>", JSON.stringify(contact, null, 2));
+           logger.log({level: 'info',message: "Exit Get Method",correlationId,});
             context.res = {
                 status: 200,
                 body: contact
@@ -72,30 +69,23 @@ module.exports = async function (context, req) {
                 status: 200,
                 body: 'Invalid action specified.'
             };
-
-
+            logger.log({level: 'error',message: "Invalid action specified",correlationId,});
         }
+        logger.log({level: 'info',message: 'Function End',correlationId,});
     } catch (error) {
         // context.log("error=>",error);
         // Handle errors using custom error handler and logging
         //customErrorHandler(error, context);
+        logger.log({level: 'error',message: error,correlationId,});
 
-        logger.log({
-            level: 'error',
-            message: error,
-            correlationId,
-        });
-    } finally {
-        logger.log({
-            level: 'info',
-            message: 'Function Ended',
-            correlationId,
-        });
+        logger.log({level: 'info',message: 'Function End with Error',correlationId,});
 
         context.res = {
             status: 200,
-            body: "Operation End"
+            body: "Error Found"
         };
-        
+         
+
+
     }
 };
