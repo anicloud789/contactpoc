@@ -7,6 +7,7 @@ const correlationId = generateCorrelationId();
 
 module.exports = async function (context, req) {
     try {
+        context.log("S_correlationid=>",correlationId);
 
         logger.log({level: 'info',message: 'Function Started',correlationId,});
 
@@ -72,11 +73,13 @@ module.exports = async function (context, req) {
             };
             logger.log({level: 'error',message: "Invalid action specified",correlationId,});
         }
+        context.log("E_correlationid=>",correlationId);
         logger.log({level: 'info',message: 'Function End',correlationId,});
     } catch (error) {
         // context.log("error=>",error);
         // Handle errors using custom error handler and logging
         //customErrorHandler(error, context);
+        context.log("Error_correlationid=>",correlationId);
         logger.log({level: 'error',message: error,correlationId,});
 
         logger.log({level: 'info',message: 'Function End with Error',correlationId,});
