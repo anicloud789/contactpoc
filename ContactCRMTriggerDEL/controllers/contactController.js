@@ -1,10 +1,21 @@
 const salesforceService = require('../services/salesforceService');
 const customErrorHandler = require('../errorHandling/customErrorHandler');
+const { logger, generateCorrelationId } = require('../logger/winstonLogger');
 
 module.exports = async function (context, req) {
     try {
 
+        const correlationId = generateCorrelationId();
+
         context.log("req=>", req);
+
+        context.log("correlationId=>", correlationId);
+
+        logger.log({
+            level: 'info',
+            message: 'Function Started',
+            correlationId,
+        });
 
         const action = req.action;
         const contactId = req.contactId;
@@ -67,6 +78,24 @@ module.exports = async function (context, req) {
     } catch (error) {
         // context.log("error=>",error);
         // Handle errors using custom error handler and logging
-        customErrorHandler(error, context);
+        //customErrorHandler(error, context);
+
+        logger.log({
+            level: 'error',
+            message: error,
+            correlationId,
+        });
+    } finally {
+        logger.log({
+            level: 'info',
+            message: 'Function Ended',
+            correlationId,
+        });
+
+        context.res = {
+            status: 200,
+            body: "Operation End"
+        };
+        
     }
 };
