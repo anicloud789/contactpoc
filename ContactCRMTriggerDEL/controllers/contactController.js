@@ -13,13 +13,11 @@ module.exports = async function (context, req) {
 
         if (action === 'getAll') {
             const contact = await salesforceService.getAllContact();
-
             context.log("ALL contacts=>", JSON.stringify(contact.recentItems, null, 2));
             context.res = {
                 status: 200,
                 body: contact.recentItems
             };
-
 
         } else if (action === 'create') {
             // Implement create logic
@@ -32,13 +30,17 @@ module.exports = async function (context, req) {
         }
         else if (action === 'update') {
             const contactDetails = req.data;
+            context.log("Update Contact ID =>", contactId);
+            context.log("Update Contact Request Details=>", JSON.stringify(contactDetails, null, 2));
             const updatedContact = await salesforceService.updateContact(contactId, contactDetails);
+            context.log("Updated Contact By ID=>", JSON.stringify(contact, null, 2));
             context.res = {
                 status: 200,
                 body: updatedContact
             };
         }
         else if (action === 'delete') {
+            context.log("Delete Contact ID =>", contactId);
             await salesforceService.deleteContact(contactId);
             context.res = {
                 status: 204
@@ -46,6 +48,8 @@ module.exports = async function (context, req) {
         }
         else if (action === 'get') {
             const contact = await salesforceService.getContact(contactId);
+            context.log("Get Contact By ID=>", JSON.stringify(contact, null, 2));
+
             context.res = {
                 status: 200,
                 body: contact
