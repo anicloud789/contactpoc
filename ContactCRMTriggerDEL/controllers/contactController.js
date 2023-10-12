@@ -1,24 +1,29 @@
 const salesforceService = require('../services/salesforceService');
 //const customErrorHandler = require('../errorHandling/customErrorHandler');
-const { logger } = require('../logger/winstonLogger'); 
-const { v4: uuidv4 } = require('uuid');
+const { logger, generateCorrelationId } = require('../logger/winstonLogger');
+//const { v4: uuidv4 } = require('uuid');
 // Function to generate a unique correlation ID
 // const generateCorrelationId = () => uuidv4();
 // const correlationId = generateCorrelationId();
 
-const generateCorrelationId = () => Math.random().toString(36).slice(2);
-const correlationId = generateCorrelationId();
+// const generateCorrelationId = () => Math.random().toString(36).slice(2);
+// const correlationId = generateCorrelationId();
 
 module.exports = async function (context, req) {
+    const correlationId = generateCorrelationId();
+    context.log("S_correlationid=>", correlationId);
+    logger.log({ level: 'info', message: 'Function Started', correlationId, });
+    await this.contactRequestAPI(context, req, correlationId);
+    logger.log({ level: 'info', message: 'Function End ', correlationId, });
+};
+
+async function contactRequestAPI(context, req, correlationId) {
     try {
-        context.log("S_correlationid=>",correlationId);
 
-        context.log("ENV=>",process.env.NODE_ENV);
-        context.log("DebugMode=>",process.env.DEBUG_MODE);
+        context.log("ENV=>", process.env.NODE_ENV);
+        context.log("DebugMode=>", process.env.DEBUG_MODE);
 
-        logger.log({level: 'info',message: 'Function Started',correlationId,});
-
-        logger.log({level: 'debug',message: JSON.stringify(req,null,2),correlationId,});
+        logger.log({ level: 'debug', message: JSON.stringify(req, null, 2), correlationId, });
 
         //context.log("req=>", req);
         //context.log("correlationId=>", correlationId);
@@ -62,11 +67,11 @@ module.exports = async function (context, req) {
             };
         }
         else if (action === 'get') {
-            logger.log({level: 'info',message: "Start Get Method",correlationId,});
+            logger.log({ level: 'info', message: "Start Get Method", correlationId, });
             const contact = await salesforceService.getContact(contactId);
-            logger.log({level: 'debug',message: JSON.stringify(contact, null, 2),correlationId,});
-           // context.log("Get Contact By ID=>", JSON.stringify(contact, null, 2));
-           logger.log({level: 'info',message: "Exit Get Method",correlationId,});
+            logger.log({ level: 'debug', message: JSON.stringify(contact, null, 2), correlationId, });
+            // context.log("Get Contact By ID=>", JSON.stringify(contact, null, 2));
+            logger.log({ level: 'info', message: "Exit Get Method", correlationId, });
             context.res = {
                 status: 200,
                 body: contact
@@ -78,23 +83,23 @@ module.exports = async function (context, req) {
                 status: 200,
                 body: 'Invalid action specified.'
             };
-            logger.log({level: 'error',message: "Invalid action specified",correlationId,});
+            logger.log({ level: 'error', message: "Invalid action specified", correlationId, });
         }
-        context.log("E_correlationid=>",correlationId);
-        logger.log({level: 'info',message: 'Function End',correlationId,});
+        context.log("E_correlationid=>", correlationId);
+        logger.log({ level: 'info', message: 'Function End', correlationId, });
     } catch (error) {
         // context.log("error=>",error);
         // Handle errors using custom error handler and logging
         //customErrorHandler(error, context);
-        context.log("Error_correlationid=>",correlationId);
-        logger.log({level: 'error',message: error,correlationId,});
+        context.log("Error_correlationid=>", correlationId);
+        logger.log({ level: 'error', message: error, correlationId, });
 
-        logger.log({level: 'info',message: 'Function End with Error',correlationId,});
 
         context.res = {
             status: 200,
             body: "Error Found"
         };
-        
+
     }
-};
+
+}

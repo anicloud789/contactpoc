@@ -29,6 +29,8 @@ const maxSize = 1024 * 256; // 250 MB
 // Check if we're in debug mode
 const isDebugMode = process.env.NODE_ENV === 'development' && process.env.DEBUG_MODE === 'true';
 
+const generateCorrelationId = () => uuidv4();
+
 const datePart = new Date().toISOString().slice(0, 10);
 const logFilePath = path.join(__dirname, 'logs', `${datePart}-app.log`);
 
@@ -101,4 +103,4 @@ if (isDebugMode) {
 //   };
 // };
 
-module.exports = { logger };
+module.exports = { logger, generateCorrelationId };
