@@ -22,12 +22,9 @@
 const { createLogger, transports, format } = require('winston');
 //const fs = require('fs');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+
 
 const maxSize = 1024 * 256; // 250 MB
-
-// Function to generate a unique correlation ID
-const generateCorrelationId = () => uuidv4();
 
 // Check if we're in debug mode
 const isDebugMode = process.env.NODE_ENV === 'development' && process.env.DEBUG_MODE === 'true';

@@ -1,13 +1,17 @@
 const salesforceService = require('../services/salesforceService');
 //const customErrorHandler = require('../errorHandling/customErrorHandler');
 const { logger, generateCorrelationId } = require('../logger/winstonLogger'); 
-
+const { v4: uuidv4 } = require('uuid');
+// Function to generate a unique correlation ID
+const generateCorrelationId = () => uuidv4();
 const correlationId = generateCorrelationId();
-
 
 module.exports = async function (context, req) {
     try {
         context.log("S_correlationid=>",correlationId);
+
+        context.log("ENV=>",process.env.NODE_ENV);
+        context.log("DebugMode=>",process.env.DEBUG_MODE);
 
         logger.log({level: 'info',message: 'Function Started',correlationId,});
 
