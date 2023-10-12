@@ -1,13 +1,14 @@
 const salesforceService = require('../services/salesforceService');
 //const customErrorHandler = require('../errorHandling/customErrorHandler');
-const { logger, generateCorrelationId } = require('../logger/winstonLogger');
+const { logger, generateCorrelationId } = require('../logger/winstonLogger'); 
+
+const correlationId = generateCorrelationId();
+
 
 module.exports = async function (context, req) {
     try {
 
         logger.log({level: 'info',message: 'Function Started',correlationId,});
-
-        const correlationId = generateCorrelationId();
 
         logger.log({level: 'debug',message: JSON.stringify(req,null,2),correlationId,});
 
@@ -84,8 +85,6 @@ module.exports = async function (context, req) {
             status: 200,
             body: "Error Found"
         };
-         
-
-
+        
     }
 };
