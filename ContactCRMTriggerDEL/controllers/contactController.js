@@ -86,7 +86,6 @@ async function contactRequestAPI(context, req, correlationId) {
             logger.log({ level: 'error', message: "Invalid action specified", correlationId, });
         }
         context.log("E_correlationid=>", correlationId);
-        logger.log({ level: 'info', message: 'Function End', correlationId, });
     } catch (error) {
         // context.log("error=>",error);
         // Handle errors using custom error handler and logging
