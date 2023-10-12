@@ -33,7 +33,7 @@ module.exports = async function (context, req) {
             context.log("Update Contact ID =>", contactId);
             context.log("Update Contact Request Details=>", JSON.stringify(contactDetails, null, 2));
             const updatedContact = await salesforceService.updateContact(contactId, contactDetails);
-            context.log("Updated Contact By ID=>", JSON.stringify(contact, null, 2));
+            context.log("Updated Contact By ID=>", JSON.stringify(updatedContact, null, 2));
             context.res = {
                 status: 200,
                 body: updatedContact
