@@ -1,7 +1,7 @@
 const salesforceService = require('../services/salesforceService');
 //const customErrorHandler = require('../errorHandling/customErrorHandler');
 const { logger, generateCorrelationId } = require('../logger/winstonLogger');
-//const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 // Function to generate a unique correlation ID
 // const generateCorrelationId = () => uuidv4();
 // const correlationId = generateCorrelationId();
@@ -13,7 +13,7 @@ module.exports = async function (context, req) {
     const correlationId = generateCorrelationId();
     context.log("S_correlationid=>", correlationId);
     logger.log({ level: 'info', message: 'Function Started', correlationId, });
-    await this.contactRequestAPI(context, req, correlationId);
+    await contactRequestAPI(context, req, correlationId);
     logger.log({ level: 'info', message: 'Function End ', correlationId, });
 };
 
