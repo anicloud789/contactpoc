@@ -37,7 +37,8 @@ const logFilePath = path.join(__dirname, 'logs', `${datePart}-app.log`);
 
 const customFileTransport = new transports.File(
     { filename: logFilePath },
-    {   format: format.combine(
+    {
+        format: format.combine(
             format.timestamp(),
             format.json(),
             format.printf((info) => {
@@ -55,8 +56,11 @@ const logger = createLogger({
 
 if (isDebugMode) {
     logger.add(new transports.File(
-        { filename: logFilePath },
-        {   format: format.combine(
+        {
+            level: 'debug',
+            filename: logFilePath
+        },{
+            format: format.combine(
                 format.timestamp(),
                 format.json(),
                 format.printf((info) => {

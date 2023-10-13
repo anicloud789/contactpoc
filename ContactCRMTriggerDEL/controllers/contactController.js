@@ -1,6 +1,16 @@
 const salesforceService = require('../services/salesforceService');
 //const customErrorHandler = require('../errorHandling/customErrorHandler');
 const { logger, generateCorrelationId } = require('../logger/winstonLogger');
+
+const {SecretClient} = require('@azure/keyvault-secrets');
+const {DefaultAzureCredential} = require('@azure/identity');
+
+const KeyVault_name = 'az-kv-dev-sales-poc';
+const keyVault_URL = `https://${KeyVault_name}.vault.azure.net/`;
+const keyVaultCLient = new SecretClient(keyVault_URL, new DefaultAzureCredential());
+
+
+
 //const { v4: uuidv4 } = require('uuid');
 // Function to generate a unique correlation ID
 // const generateCorrelationId = () => uuidv4();
@@ -10,6 +20,8 @@ const { logger, generateCorrelationId } = require('../logger/winstonLogger');
 // const correlationId = generateCorrelationId();
 
 module.exports = async function (context, req) {
+
+   
     const correlationId = generateCorrelationId();
     context.log("S_correlationid=>", correlationId);
     logger.log({ level: 'info', message: 'Function Started', correlationId, });
@@ -22,6 +34,10 @@ async function contactRequestAPI(context, req, correlationId) {
 
         context.log("ENV=>", process.env.NODE_ENV);
         context.log("DebugMode=>", process.env.DEBUG_MODE);
+ 
+        const ClientScr = await keyVaultCLient.getSecret('kv-sales-client-secret');
+
+        context.log("keyVault sale secet=>",ClientScr.value);
 
         logger.log({ level: 'debug', message: JSON.stringify(req, null, 2), correlationId, });
 
