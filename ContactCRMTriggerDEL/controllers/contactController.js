@@ -2,12 +2,6 @@ const salesforceService = require('../services/salesforceService');
 //const customErrorHandler = require('../errorHandling/customErrorHandler');
 const { logger, generateCorrelationId } = require('../logger/winstonLogger');
 
-const {SecretClient} = require('@azure/keyvault-secrets');
-const {DefaultAzureCredential} = require('@azure/identity');
-
-const KeyVault_name = 'az-kv-dev-sales-poc';
-const keyVault_URL = `https://${KeyVault_name}.vault.azure.net/`;
-const keyVaultCLient = new SecretClient(keyVault_URL, new DefaultAzureCredential());
 
 
 
@@ -35,11 +29,8 @@ async function contactRequestAPI(context, req, correlationId) {
         context.log("ENV=>", process.env.NODE_ENV);
         context.log("DebugMode=>", process.env.DEBUG_MODE);
  
-        const ClientScr = await keyVaultCLient.getSecret('kv-sales-client-secret');
-
-        context.log("keyVault sale secet=>",ClientScr.value);
-
-        logger.log({ level: 'debug', message: JSON.stringify(req, null, 2), correlationId, });
+        context.log("data=>",JSON.stringify(req, null, 2));
+        logger.log({ level: 'info', message: JSON.stringify(req, null, 2), correlationId, });
 
         //context.log("req=>", req);
         //context.log("correlationId=>", correlationId);
@@ -85,8 +76,8 @@ async function contactRequestAPI(context, req, correlationId) {
         else if (action === 'get') {
             logger.log({ level: 'info', message: "Start Get Method", correlationId, });
             const contact = await salesforceService.getContact(contactId);
-            logger.log({ level: 'debug', message: JSON.stringify(contact, null, 2), correlationId, });
-            // context.log("Get Contact By ID=>", JSON.stringify(contact, null, 2));
+           // logger.log({ level: 'debug', message: JSON.stringify(contact, null, 2), correlationId, });
+             context.log("Get Contact By ID=>", JSON.stringify(contact, null, 2));
             logger.log({ level: 'info', message: "Exit Get Method", correlationId, });
             context.res = {
                 status: 200,

@@ -55,22 +55,22 @@ const logger = createLogger({
 });
 
 if (isDebugMode) {
-    logger.add(new transports.File(
-        {
-            level: 'debug',
-            filename: logFilePath
-        },{
-            format: format.combine(
-                format.timestamp(),
-                format.json(),
-                format.printf((info) => {
-                    // Add correlation ID to the log message
-                    return `[${info.timestamp}] [Correlation ID: ${info.correlationId}] ${info.level}: ${info.message}`;
-                })
-            ),
-            maxsize: maxSize,
-            maxFiles: 3, // Maximum number of files to keep (for rotation)
-        }));
+    // logger.add(new transports.File(
+    //     {
+    //         level: 'debug',
+    //         filename: logFilePath
+    //     },{
+    //         format: format.combine(
+    //             format.timestamp(),
+    //             format.json(),
+    //             format.printf((info) => {
+    //                 // Add correlation ID to the log message
+    //                 return `[${info.timestamp}] [Correlation ID: ${info.correlationId}] ${info.level}: ${info.message}`;
+    //             })
+    //         ),
+    //         maxsize: maxSize,
+    //         maxFiles: 3, // Maximum number of files to keep (for rotation)
+    //     }));
 }
 
 // if (isDebugMode) {

@@ -1,5 +1,10 @@
 const axios = require('axios');
+const {SecretClient} = require('@azure/keyvault-secrets');
+const {DefaultAzureCredential} = require('@azure/identity');
 
+const KeyVault_name = 'az-kv-dev-sales-poc';
+const keyVault_URL = `https://${KeyVault_name}.vault.azure.net/`;
+const keyVaultCLient = new SecretClient(keyVault_URL, new DefaultAzureCredential());
 
 const salesforceConfig = {
     clientId: '3MVG95mg0lk4batgXsIfxmF4cCf2xt9s_4TOoW4cmSUM6DITFPZGEiwkbt5vhgmbjHfSjZVSTjbTMB.4Q4t2k',
@@ -12,11 +17,13 @@ const salesforceConfig = {
 
 const authenticateWithSalesforce = async () => {
     try {
+        const kVSalesClientSecret = await keyVaultCLient.getSecret('kv-sales-client-secret');
+    
         const response = await axios.post(`${salesforceConfig.instanceUrl}/services/oauth2/token`, null, {
             params: {
                 grant_type: 'refresh_token',
                 client_id: salesforceConfig.clientId,
-                client_secret: salesforceConfig.clientSecret,
+                client_secret: kVSalesClientSecret.value,
                 refresh_token: salesforceConfig.refreshToken,
             },
         });
