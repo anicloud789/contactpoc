@@ -1,18 +1,17 @@
 const salesforceAuth = require('../auth/salesforceAuth');
 const axios = require('axios');
-const winstonLogger = require('../logger/winstonLogger');
 
-// Update Salesforce instance URL
-const BASE_URL = 'https://dream-nosoftware-499.my.salesforce.com'; 
+// Update Salesforce instance URL : process.env.SaleforceURL
+const BASE_URL = 'https://dream-nosoftware-499.my.salesforce.com';
 
-const authenticateAndFetchAccessToken = async () => {
-    const accessToken = await salesforceAuth.authenticateWithSalesforce();
+const getSalefoceAccessToken = async () => {
+    const accessToken = await salesforceAuth.authenticatSFTokenRequest();
     return accessToken;
 };
 
 const getAllContact = async () => {
     try {
-        const accessToken = await authenticateAndFetchAccessToken();
+        const accessToken = await getSalefoceAccessToken();
 
         const response = await axios.get(`${BASE_URL}/services/data/v53.0/sobjects/Contact`, {
             headers: {
@@ -32,7 +31,7 @@ const getAllContact = async () => {
 
 const getContact = async (contactId) => {
     try {
-        const accessToken = await authenticateAndFetchAccessToken();
+        const accessToken = await getSalefoceAccessToken();
 
         const response = await axios.get(`${BASE_URL}/services/data/v53.0/sobjects/Contact/${contactId}`, {
             headers: {
@@ -52,7 +51,7 @@ const getContact = async (contactId) => {
 
 const createContact = async (contactDetails) => {
     try {
-        const accessToken = await authenticateAndFetchAccessToken();
+        const accessToken = await getSalefoceAccessToken();
 
         const response = await axios.post(`${BASE_URL}/services/data/v53.0/sobjects/Contact/`, contactDetails, {
             headers: {
@@ -73,7 +72,7 @@ const createContact = async (contactDetails) => {
 
 const updateContact = async (contactId, contactDetails) => {
     try {
-        const accessToken = await authenticateAndFetchAccessToken();
+        const accessToken = await getSalefoceAccessToken();
 
         const response = await axios.patch(`${BASE_URL}/services/data/v53.0/sobjects/Contact/${contactId}`, contactDetails, {
             headers: {
@@ -94,7 +93,7 @@ const updateContact = async (contactId, contactDetails) => {
 
 const deleteContact = async (contactId) => {
     try {
-        const accessToken = await authenticateAndFetchAccessToken();
+        const accessToken = await getSalefoceAccessToken();
 
         const response = await axios.delete(`${BASE_URL}/services/data/v53.0/sobjects/Contact/${contactId}`, {
             headers: {
